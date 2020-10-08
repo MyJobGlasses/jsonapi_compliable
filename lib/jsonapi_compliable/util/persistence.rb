@@ -151,7 +151,6 @@ class JsonapiCompliable::Util::Persistence
   def process_belongs_to(relationships)
     [].tap do |processed|
       iterate(only: [:polymorphic_belongs_to, :belongs_to]) do |x|
-        byebug
         x[:object] = x[:sideload].resource
           .persist_with_relationships(x[:meta], x[:attributes], x[:relationships])
         processed << x
