@@ -37,6 +37,14 @@ class JsonapiCompliable::Util::Persistence
     update_foreign_key_for_parents(parents)
 
     persisted = persist_object(@meta[:method], @attributes)
+    if @resource.model && !persisted.is_a?(@resource.model)
+      msg = "Trying to persist a resource whose class is #{persisted.class}"\
+       " does not match the resource model #{@resource.model}"\
+       ' crashes are likely to occur during validation and error generation'
+      # coupling with rails here, sorry in advance
+      Rails.logger.error msg
+    end
+
     assign_temp_id(persisted, @meta[:temp_id])
 
     associate_parents(persisted, parents)
